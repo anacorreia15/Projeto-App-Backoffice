@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Backoffice</title>
+    <!-- Incluindo Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+        /* Estilos personalizados */
+        body {
+            padding-top: 20px;
+        }
+        .arrow {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 5px 5px 0 5px;
+            border-color: #000 transparent transparent transparent;
+            transition: transform 0.3s;
+        }
+
+        .collapsed .arrow {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mb-4">Backoffice - Controlo de Desperdício</h1>
+
+    <!-- Formulário para selecionar o dia -->
+    <form th:action="@{/}" method="get" class="mb-4">
+        <div class="form-group">
+            <label for="data">Escolha a data:</label>
+            <input type="date" id="data" name="data" class="form-control">
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <button type="submit" class="btn btn-primary btn-block">Visualizar</button>
+            </div>
+            <div class="col-md-6 mb-4">
+                <a th:href="@{/visualizar}" class="btn btn-secondary btn-block">Dados mensais</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Tabela para exibir os dados -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Volume de Sopa Desperdiçado</th>
+            <th>Volume de Sopa Produzido</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Aqui você vai iterar sobre os dados recebidos do backend -->
+        <tr th:each="registo : ${dados}">
+            <td th:text="${registo.dataEhora}"></td>
+            <td th:text="${registo.volumeSopaDesperdicado}"></td>
+            <!--<td th:text="${registro.volumeProduzido}"></td> -->
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Acordeão para inserir ementas -->
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Inserir Ementa
+                        <span class="arrow"></span>
+                    </button>
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <!-- Formulário para inserir ementas semanais -->
+                    <form th:action="@{/}" method="post">
+                        <div class="form-group">
+                            <label for="dataEmenta">Data:</label>
+                            <input type="date" id="dataEmenta" name="dataEmenta" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="sopa">Nome da sopa?</label>
+                            <input type="text" id="sopa" name="sopa" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="volume">Volume (litros) Produzido</label>
+                            <input type="text" id="volume" name="volume" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Inserir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Inclua o jQuery antes do Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
