@@ -1,6 +1,8 @@
 package com.projeto.Backendmicroservice;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
+import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,22 +10,39 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
+@SqlResultSetMapping(
+        name = "DadosRefeicaoMapping",
+        classes = {
+                @ConstructorResult(
+                        targetClass = DadosRefeicao.class,
+                        columns = {
+                                @ColumnResult(name = "data", type = LocalDate.class),
+                                @ColumnResult(name = "volumeSopaDesperdicado", type = Double.class)
+                        }
+                )
+        }
+)
 public interface RepositorioRefeicoes extends JpaRepository<Refeicao, Integer> {
 
-    @Query(value = "SELECT * FROM refeicao r WHERE MONTH(r.data) = :mesAtual AND r.tigela = true ORDER BY r.data ASC", nativeQuery = true)
-    List<Refeicao> findRefeicoesByMesAndTigela(@Param("mesAtual") int mesAtual);
+    @Query(value = "SELECT * FROM refeicao r WHERE MONTH(r.data) = :mes AND r.tigela = true ORDER BY r.data ASC", nativeQuery = true)
+    List<Refeicao> findRefeicoesByMes(@Param("mes") int mes);
 
-    @Query(value = "SELECT * FROM refeicao r WHERE r.data = :data AND r.tigela = true", nativeQuery = true)
-    List<Refeicao> findRefeicoesByDataAndTigela(@Param("data") LocalDate data);
+    //Query para retornal o total de sopa por dia quando é escolhidodo mes
+    /*@Query(value = "SELECT data, SUM(volume_sopa_desperdicado) as volumeSopaDesperdicado FROM refeicao r WHERE MONTH(r.data) = :mes  AND r.tigela = true GROUP BY r.data ORDER BY r.data ASC", nativeQuery = true)
+    List<DadosRefeicao> calculaTotalSopaByMes(@Param("mes") Integer mes);*/
 
-    @Query(value = "SELECT MONTH(r.data) AS mes, COUNT(*) AS totalSopa FROM refeicao r WHERE r.tigela = true  AND MONTH(r.data) = :mesAtual GROUP BY MONTH(r.data) ORDER BY mes", nativeQuery = true)
-    Optional<Integer> findTotalSopaPorMes(@Param("mesAtual") int mesAtual);
+    //Query para retornal o total de sopa por dia quando é escolhido o dia especifico
+    @Query(value = "SELECT SUM(volume_sopa_desperdicado) as volumeSopaDesperdicado FROM refeicao r WHERE r.data = :data AND r.tigela = true GROUP BY DAY(r.data)", nativeQuery = true)
+    Double calculaTotalSopaByData(@Param("data") LocalDate data);
 
-    @Query(value = "SELECT COUNT(*) AS totalSopa FROM refeicao r WHERE r.tigela = true", nativeQuery = true)
-    Optional<Integer> findTotalSopa();
+    @Query(value = "SELECT COUNT(*) AS nr_refeicoes FROM refeicao r WHERE r.data = :data", nativeQuery = true)
+    Integer countTotalRefeicoesPorDia(@Param("data") LocalDate data);
+
+    @Query(value = "SELECT COUNT(*) AS total_litros FROM refeicao r WHERE MONTH(r.data) = :mes AND r.tigela = true", nativeQuery = true)
+    Double countLitrosPorMes(@Param("mes") int mes);
+
 
 
 

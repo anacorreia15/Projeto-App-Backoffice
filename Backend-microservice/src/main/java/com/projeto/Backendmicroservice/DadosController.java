@@ -8,18 +8,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
 public class DadosController {
 
     private final RepositorioRefeicoes repositorioRefeicoes;
+    private final GestorDadosService gestorDadosService;
 
     /*Tabelas*/
     @GetMapping("/visualizarMensal")
-    public List<Refeicao> getDataByMes(@RequestParam("mes") int mes){
-        return repositorioRefeicoes.findRefeicoesByMesAndTigela(mes);
+    public List<DadosRefeicao> getDadosByMes(@RequestParam("mes") int mes){
+        return gestorDadosService.obterTotalSopaMes(mes);
+    }
+
+    @GetMapping("/visualizarMensal/total")
+    public double getTotalLitrosMes(@RequestParam("mes") int mes){
+       return repositorioRefeicoes.countLitrosPorMes(mes);
     }
 
     @GetMapping("/visualizar")
@@ -28,15 +33,17 @@ public class DadosController {
     }
 
     @GetMapping("/visualizarData")
-    public List<Refeicao> getDataByDate(@RequestParam("data") LocalDate data){
-        return repositorioRefeicoes.findRefeicoesByDataAndTigela(data);
+    public DadosRefeicao getDadosRefeicaoByDate(@RequestParam("data") LocalDate data){
+        return gestorDadosService.obterTotalSopa(data);
+    }
+
+    @GetMapping("/visualizarData/total")
+    public Integer getTotalRefeicoes(@RequestParam("data") LocalDate data){
+        return repositorioRefeicoes.countTotalRefeicoesPorDia(data);
     }
 
     /*Gráficos*/
-    @GetMapping("/total-mensal")
-    public Optional<Integer> getTotaisMes(){
-        return repositorioRefeicoes.findTotalSopaPorMes(LocalDate.now().getMonthValue());
-    }
+
 
 
 

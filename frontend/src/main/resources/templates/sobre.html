@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Backoffice</title>
+    <!-- Incluindo Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-
+<div class="sidebar">
+    <h3><a th:href="@{/}">Backoffice</a></h3>
+    <hr id="hr">
+    <a class="special" th:href="@{/}" >Geral</a>
+    <a class="special" th:href="@{/ementas}">Ementas</a>
+    <a class="special" th:href="@{/graficos}">Estatísticas</a>
+    <a class="special" th:href="@{/sobre}">Sobre</a>
+</div>
+<div class="container">
+   <p>Aqui vai ter um texto muito bonito sobre o nosso projeto :)</p>
+</div>
+<!-- Inclua o jQuery antes do Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
