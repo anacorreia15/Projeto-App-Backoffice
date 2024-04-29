@@ -1,0 +1,78 @@
+/* Estilos para a barra lateral */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #228B22 ; /* Cor da barra lateral */
+    padding-top: 20px;
+    color: white; /* Cor do texto */
+}
+/* Estilos para o título na barra lateral */
+.sidebar h3 {
+    margin-bottom: 20px; /* Adiciona espaço entre o título e os links */
+    padding-left: 20px; /* Adiciona um preenchimento à esquerda para alinhar com os links */
+}
+
+.sidebar h3 a {
+    color: white; /* Cor do texto do título */
+    text-decoration: none; /* Remover sublinhado */
+}
+
+/* Estilos para os links na barra lateral */
+.sidebar a {
+    padding: 10px;
+    display: block;
+    color: white; /* Cor dos links */
+    text-decoration: none; /* Remover sublinhado */
+}
+
+.special:hover, .special.active {
+    background-color: #90EE90; /* Cor de fundo dos links quando hover */
+}
+
+/* Estilos para o conteúdo */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+body {
+    padding-top: 20px;
+}
+.arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5px 0 5px;
+    border-color: #000 transparent transparent transparent;
+    transition: transform 0.3s;
+}
+
+.collapsed .arrow {
+    transform: rotate(180deg);
+}
+
+/* Estilos para os botões */
+.btn-primary,
+.btn-secondary{
+    background-color: #228B22; /* Cor de fundo dos botões */
+    border-color:#228B22; /* Cor da borda dos botões */
+    color: white; /* Cor do texto dos botões */
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    background-color: #90EE90; /* Cor de fundo dos botões quando hover */
+    border-color: #90EE90; /* Cor da borda dos botões quando hover */
+}
+
+#hr {
+    border: none; /* Remove a borda padrão */
+    height: 1.5px; /* Define a altura desejada */
+    background-color: #fff; /* Define a cor branca */
+    margin-top: 5px; /* Adiciona um espaço superior */
+    margin-bottom: 20px; /* Adiciona um espaço inferior */
+    width: 80%;
+}

@@ -20,7 +20,7 @@ public class BackendMicroserviceApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		//Refeicao refeicao = new Refeicao(LocalDateTime.now(),5);
+		//Refeicao refeicao = new Refeicao(LocalDate.now(),5);
 		//repositorioRefeicoes.save(refeicao);
 	}
 }
