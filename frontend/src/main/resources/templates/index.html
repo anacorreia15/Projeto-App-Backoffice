@@ -20,7 +20,8 @@
 <div class="container">
     <h1 class="mb-4"><a th:href="@{/}" style="color: inherit; text-decoration: none;">Backoffice - Controlo de Desperdício</a></h1>
     <!-- Formulário para selecionar o dia -->
-    <form th:action="@{/visualizarData}" method="get" class="mb-4">
+    <br><br>
+    <form th:action="@{/geral/visualizarData}" method="get" class="mb-4">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -33,11 +34,11 @@
                     <label for="mes">Selecione o Mês:</label>
                     <select class="form-control" id="mes" onchange="window.location.href=this.value;">
                         <option value="">Selecione...</option>
-                        <option th:value="@{/visualizarMensal?mes=1}" th:text="Janeiro"></option>
-                        <option th:value="@{/visualizarMensal?mes=2}" th:text="Fevereiro"></option>
-                        <option th:value="@{/visualizarMensal?mes=3}" th:text="Março"></option>
-                        <option th:value="@{/visualizarMensal?mes=4}" th:text="Abril"></option>
-                        <option th:value="@{/visualizarMensal?mes=5}" th:text="Maio"></option>
+                        <option th:value="@{/geral/visualizarMensal?mes=1}" th:text="Janeiro"></option>
+                        <option th:value="@{/geral/visualizarMensal?mes=2}" th:text="Fevereiro"></option>
+                        <option th:value="@{/geral/visualizarMensal?mes=3}" th:text="Março"></option>
+                        <option th:value="@{/geral/visualizarMensal?mes=4}" th:text="Abril"></option>
+                        <option th:value="@{/geral/visualizarMensal?mes=5}" th:text="Maio"></option>
                         <!-- Adicione os outros meses conforme necessário -->
                     </select>
                 </div>
@@ -47,34 +48,52 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <a th:href="@{/visualizar}" class="btn btn-secondary btn-block">Visualizar Todos os Dados</a>
+            <a th:href="@{/geral/visualizar}" class="btn btn-secondary btn-block">Visualizar Todos os Dados</a>
         </div>
     </div>
-
     <br>
+    <span th:if="${totais != null}"><p>Total de litros desperdiçados: <span th:text="${totais}"></span> L</p></span>
+    <span th:if="${dados != null}">
     <!-- Tabela para exibir os dados -->
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Data</th>
-            <th>Volume Total de Sopa Desperdiçado (litros)</th>
-            <!--<th>Volume de Sopa Produzido</th>-->
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Aqui você vai iterar sobre os dados recebidos do backend -->
-        <tr th:each="registo : ${dados}">
-            <td th:text="${registo.data}"></td>
-            <td th:text="${#numbers.formatDecimal(registo.volumeSopaDesperdicado, 1, 2)}"></td>
-            <!--<td th:text="${registo.volumeSopaDesperdicado}"></td>-->
-            <!--<td th:text="${registro.volumeProduzido}"></td> -->
-        </tr>
-        </tbody>
-    </table>
-    <p>Total de Refeições servidas:
-        <span th:if="${totais != null}" th:text="${totais}"></span>
-        <span th:if="${totais == null}">Dado não disponível</span>
-    </p>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Volume Total de Sopa Desperdiçado (litros)</th>
+                <!--<th>Volume de Sopa Produzido</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Aqui você vai iterar sobre os dados recebidos do backend -->
+            <tr th:each="registo : ${dados}">
+                <td th:text="${registo.data}"></td>
+                <td th:text="${#numbers.formatDecimal(registo.volumeSopaDesperdicado, 1, 2)}"></td>
+                <!--<td th:text="${registo.volumeSopaDesperdicado}"></td>-->
+                <!--<td th:text="${registro.volumeProduzido}"></td> -->
+            </tr>
+            </tbody>
+        </table>
+    </span>
+    <br><br>
+    <span th:if="${totalRefeicoes != null}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nº Total de Refeições servidas</th>
+                <th>Nº Total de Refeições com Sopa</th>
+                <th>Nº Total de Refeições sem Sopa</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Aqui você vai iterar sobre os dados recebidos do backend -->
+            <tr>
+                <td th:text="${totalRefeicoes}"></td>
+                <td th:text="${totalRefeicoesComSopa}"></td>
+                <td th:text="${totalRefeicoesSemSopa}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </span>
 </div>
 <!-- Inclua o jQuery antes do Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -89,7 +108,7 @@
         // Obtém o valor da data selecionada
         var selectedDate = this.value;
         // Redireciona para a página desejada passando a data como parâmetro
-        window.location.href = '/visualizarData?data=' + selectedDate;
+        window.location.href = '/geral/visualizarData?data=' + selectedDate;
     });
 </script>
 </body>

@@ -1,4 +1,4 @@
-package com.projeto.Backendmicroservice;
+package com.projeto.Backendmicroservice.Refeicao;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

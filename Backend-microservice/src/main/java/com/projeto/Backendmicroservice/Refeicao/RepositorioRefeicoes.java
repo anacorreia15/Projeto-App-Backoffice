@@ -1,4 +1,4 @@
-package com.projeto.Backendmicroservice;
+package com.projeto.Backendmicroservice.Refeicao;
 
 import jakarta.persistence.ColumnResult;
 import jakarta.persistence.ConstructorResult;
@@ -12,19 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-@SqlResultSetMapping(
-        name = "DadosRefeicaoMapping",
-        classes = {
-                @ConstructorResult(
-                        targetClass = DadosRefeicao.class,
-                        columns = {
-                                @ColumnResult(name = "data", type = LocalDate.class),
-                                @ColumnResult(name = "volumeSopaDesperdicado", type = Double.class)
-                        }
-                )
-        }
-)
-public interface RepositorioRefeicoes extends JpaRepository<Refeicao, Integer> {
+public interface RepositorioRefeicoes extends JpaRepository<Refeicao, Long> {
 
     @Query(value = "SELECT * FROM refeicao r WHERE MONTH(r.data) = :mes AND r.tigela = true ORDER BY r.data ASC", nativeQuery = true)
     List<Refeicao> findRefeicoesByMes(@Param("mes") int mes);
@@ -40,10 +28,12 @@ public interface RepositorioRefeicoes extends JpaRepository<Refeicao, Integer> {
     @Query(value = "SELECT COUNT(*) AS nr_refeicoes FROM refeicao r WHERE r.data = :data", nativeQuery = true)
     Integer countTotalRefeicoesPorDia(@Param("data") LocalDate data);
 
+    @Query(value = "SELECT COUNT(*) AS nr_refeicoes FROM refeicao r WHERE r.data = :data  AND r.tigela = true", nativeQuery = true)
+    Integer countTotalRefeicoesPorDiaComTigela(@Param("data") LocalDate data);
+
+    @Query(value = "SELECT COUNT(*) AS nr_refeicoes FROM refeicao r WHERE r.data = :data  AND r.tigela = false", nativeQuery = true)
+    Integer countTotalRefeicoesPorDiaSemTigela(@Param("data") LocalDate data);
+
     @Query(value = "SELECT COUNT(*) AS total_litros FROM refeicao r WHERE MONTH(r.data) = :mes AND r.tigela = true", nativeQuery = true)
     Double countLitrosPorMes(@Param("mes") int mes);
-
-
-
-
 }

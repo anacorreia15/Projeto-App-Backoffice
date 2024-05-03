@@ -18,74 +18,59 @@
 </div>
 <div class="container">
     <h1 class="mb-4"><a th:href="@{/}" style="color: inherit; text-decoration: none;">Backoffice - Controlo de Desperdício</a></h1>
-    <!-- Acordeão para inserir ementas -->
-    <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Inserir Ementa
-                        <span class="arrow"></span>
-                    </button>
-                </h5>
+    <div>
+        <br><br>
+        <h4>Inserir ementas</h4>
+        <form th:action="@{/ementas/inserir}" method="post" >
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="date" id="data" name="data" class="form-control" required/>
             </div>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    <!-- Formulário para inserir ementas semanais -->
-                    <form th:action="@{/}" method="post">
-                        <div class="form-group">
-                            <label for="dataEmenta">Data:</label>
-                            <input type="date" id="dataEmenta" name="dataEmenta" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="sopa">Nome da sopa?</label>
-                            <input type="text" id="sopa" name="sopa" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="volume">Volume (litros) Produzido</label>
-                            <input type="text" id="volume" name="volume" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Inserir</button>
-                    </form>
-                </div>
+            <div class="form-group">
+                <label for="nomeSopa">Nome da sopa:</label>
+                <input type="text" id="nomeSopa" name="nomeSopa" class="form-control" required/>
             </div>
-        </div>
-        <!-- Segunda seção -->
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        Visualizar Ementa
-                        <span class="arrow"></span>
-                    </button>
-                </h5>
+            <div class="form-group">
+                <label for="quantidade">Volume (litros) Produzido:</label>
+                <input type="text" id="quantidade" name="quantidade" class="form-control" required/>
             </div>
-
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
-                    <!-- Conteúdo da segunda seção -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Terceira seção -->
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h5 class="mb-0">
-                    <button class="btn" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                        Terceira Seção
-                        <span class="arrow"></span>
-                    </button>
-                </h5>
-            </div>
-
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                <div class="card-body">
-                    <!-- Conteúdo da terceira seção -->
-                </div>
-            </div>
-        </div>
+            <button type="submit" class="btn btn-primary">Inserir</button>
+        </form>
     </div>
+    <br><hr><br>
+    <div>
+        <h4>Visualizar ementas Semanais</h4>
+        <div class="container">
+           <!-- Formulário com Bootstrap -->
+            <form th:action="@{/ementas/visualizar}" method="get" class="form-inline">
+                <div class="form-group mr-2">
+                    <label for="semana" class="mr-2">Escolha a semana:</label>
+                    <input type="week" id="semana" name="semana" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Atualizar</button>
+            </form>
+        </div>
+        <br>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Dia</th>
+                <th>Nome da Sopa</th>
+                <th>Volume de Sopa Produzido (litros)</th>
+                <!--<th>Volume de Sopa Produzido</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Aqui você vai iterar sobre os dados recebidos do backend -->
+            <tr th:each="ementa : ${ementas}">
+                <td th:text="${ementa.data}"></td>
+                <td th:text="${ementa.nomeSopa}"></td>
+                <td th:text="${#numbers.formatDecimal(ementa.quantidade, 1, 2)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 <!-- Inclua o jQuery antes do Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
