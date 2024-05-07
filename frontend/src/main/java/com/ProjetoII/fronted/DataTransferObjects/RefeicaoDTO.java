@@ -16,7 +16,6 @@ public class RefeicaoDTO {
 
     private long id;
     private LocalDate data;
-    //private long nRefeicoes; não é um parametro mas sim uma soma de todos os registos que haverá
     private double volumeSopaDesperdicado;
     private boolean tigela;
 

@@ -6,6 +6,8 @@
     <!-- Incluindo Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
 <div class="sidebar">
@@ -13,50 +15,153 @@
     <hr id="hr">
     <a class="special" th:href="@{/}" >Geral</a>
     <a class="special" th:href="@{/ementas}">Ementas</a>
-    <a class="special" th:href="@{/graficos}">Estatísticas</a>
+    <a class="special" th:href="@{/estatisticas}">Estatísticas</a>
     <a class="special" th:href="@{/sobre}">Sobre</a>
 </div>
 <div class="container">
     <h1 class="mb-4"><a th:href="@{/}" style="color: inherit; text-decoration: none;">Backoffice - Controlo de Desperdício</a></h1>
     <!-- Formulário para selecionar o dia -->
-    <form th:action="@{/visualizarData}" method="get" class="mb-4">
-        <div class="form-group">
-            <label for="data">Escolha a data:</label>
-            <input type="date" id="data" name="data" class="form-control" required>
+    <br>
+    <h4>-- Gráficos --</h4>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Formulário com Bootstrap -->
+            <form th:action="@{/estatisticas/total-semanal}" method="get" class="form-group">
+                <label for="semana">Selecione a semana:</label>
+                <input type="week" id="semana" name="semana" class="form-control" required>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="mes">Selecione o mês:</label>
+                <select class="form-control" id="mes" onchange="window.location.href=this.value;">
+                    <option value="">Selecione...</option>
+                    <option th:value="@{/estatisticas/visualizarMensal?mes=1}" th:text="Janeiro"></option>
+                    <option th:value="@{/estatisticas/visualizarMensal?mes=2}" th:text="Fevereiro"></option>
+                    <option th:value="@{/estatisticas/visualizarMensal?mes=3}" th:text="Março"></option>
+                    <option th:value="@{/estatisticas/visualizarMensal?mes=4}" th:text="Abril"></option>
+                    <option th:value="@{/estatisticas/visualizarMensal?mes=5}" th:text="Maio"></option>
+                    <!-- Adicione os outros meses conforme necessário -->
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <a th:href="@{/estatisticas}" class="btn btn-secondary btn-block">Outras Estatísticas</a>
+        </div>
+    </div>
+    <span th:if="${comSopa != null and semSopa != null and volumeDespSemanal != null}">
+        <br><hr><br>
+        <div class="row justify-content-center">
+            <h5>Semana: <span th:text="${volumeDespSemanal[0].data}"></span> - <span th:text="${volumeDespSemanal[6].data}"></span></h5>
         </div>
         <div class="row">
-            <div class="col-md-4 mb-4">
-                <button type="submit" class="btn btn-primary btn-block">Visualizar Por Data</button>
+            <div class="col-md-6">
+                <canvas id="pie-chart" width="400" height="400"></canvas>
             </div>
-            <div class="col-md-4 mb-4">
-                <a th:href="@{${'/visualizarMensal'}}" class="btn btn-secondary btn-block">Visualizar Dados Mensais</a>
-            </div>
-            <div class="col-md-4 mb-4">
-                <a th:href="@{/visualizar}" class="btn btn-secondary btn-block">Visualizar Todos os Dados</a>
+            <div class="col-md-6">
+                <canvas id="bar-chart1" width="400" height="400"></canvas>
             </div>
         </div>
-    </form>
-    <!-- Tabela para exibir os dados -->
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Data</th>
-            <th>Volume de Sopa Desperdiçado (litros)</th>
-            <!--<th>Volume de Sopa Produzido</th>-->
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Aqui você vai iterar sobre os dados recebidos do backend -->
-        <tr th:each="registo : ${dados}">
-            <td th:text="${registo.data}"></td>
-            <td th:text="${#numbers.formatDecimal(registo.volumeSopaDesperdicado, 1, 2)}"></td>
-            <!--<td th:text="${registo.volumeSopaDesperdicado}"></td>-->
-        </tr>
-        </tbody>
-    </table>
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="bar-chart2" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </span>
 </div>
+<!--Gráficos-->
+<script th:inline="javascript">
+    // Dados para o gráfico 1
+    var comSopa =/*[[${comSopa}]]*/ [];
+    var semSopa =/*[[${semSopa}]]*/ [];
+    var data = /*[[${semSopa}]]*/[];
+
+    console.log([comSopa, semSopa]);
+
+    var ctx = document.getElementById('pie-chart').getContext('2d');
+    var grafico = new Chart (ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Tabuleiros Sem Sopa','Tabuleiros Com Sopa'],
+            datasets: [{
+                data: [20, 30],
+                backgroundColor: [
+                    'rgba(50,205,50)', // Cor para "Com Sopa"
+                    'rgba(144,238,144)'  // Cor para "Sem Sopa"
+                ]
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Título do Gráfico...'
+            }
+        }
+    });
+
+    // Dados para o gráfico 2
+    // Inicializa a lista de volumes
+    var volumeDespSemanal = [];
+
+    // Adiciona os volumes da lista de objetos do Thymeleaf
+    /*[# th:each="item : ${volumeDespSemanal}"]*/
+    volumeDespSemanal.push(/*[[${item.volumeSopaDesperdicado}]]*/);
+    /*[/]*/
+
+    var diasSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
+    console.log([volumeDespSemanal]);
+
+    // Criar o contexto do gráfico
+    var ctx = document.getElementById('bar-chart1').getContext('2d');
+    var grafico1 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: diasSemana, // Usar os nomes dos dias da semana como labels no eixo x
+            datasets: [{
+                label: 'Volume Desp. Semanal', // Rótulo para a legenda
+                data: volumeDespSemanal, // Usar os volumes como dados no eixo y
+                backgroundColor: 'rgba(50,205,50)', // Cor para as barras
+                borderWidth: 1 // Largura da borda das barras
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Volume Desperdiçado de Sopa Semanal' // Título do gráfico
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Volume' // Rótulo do eixo y
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Dia da Semana' // Rótulo do eixo x
+                    }
+                }]
+            }
+        }
+    });
+
+</script>
 <!-- Inclua o jQuery antes do Bootstrap -->
+<script src="/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Adiciona um listener para o evento de mudança do input de data
+    document.getElementById('semana').addEventListener('change', function() {
+        // Obtém o valor da data selecionada
+        var selectedDate = this.value;
+        // Redireciona para a página desejada passando a data como parâmetro
+        window.location.href = '/estatisticas/total-semanal?semana=' + selectedDate;
+    });
+</script>
 </body>
 </html>

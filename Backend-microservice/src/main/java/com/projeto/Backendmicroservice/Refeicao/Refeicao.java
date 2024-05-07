@@ -28,4 +28,10 @@ public class Refeicao {
         this.volumeSopaDesperdicado = volumeSopaDesperdicado;
         this.tigela = tigela;
     }
+
+    public Refeicao(LocalDate data, double volumeSopaDesperdicado) {
+        this.data = data;
+        this.volumeSopaDesperdicado = volumeSopaDesperdicado;
+    }
+
 }

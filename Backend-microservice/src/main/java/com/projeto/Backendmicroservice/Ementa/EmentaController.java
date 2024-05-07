@@ -1,6 +1,7 @@
 package com.projeto.Backendmicroservice.Ementa;
 
 import com.projeto.Backendmicroservice.Refeicao.DadosRefeicao;
+import com.projeto.Backendmicroservice.Refeicao.GestorDadosService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class EmentaController {
 
     private final RepositorioEmentas repositorioEmentas;
+    private final GestorDadosService gestorDadosService;
 
     @PostMapping("/ementas/inserir")
     public void insertEmenta(@RequestBody Ementa ementa){
@@ -44,4 +46,11 @@ public class EmentaController {
 
         return ementas;
     }
+
+    @GetMapping("/visualizarData/sopaProd")
+    public DadosRefeicao getTotalSopaProd(@RequestParam("data") LocalDate data) {
+        return gestorDadosService.obterTotalSopaProd(data);
+    }
+
+
 }

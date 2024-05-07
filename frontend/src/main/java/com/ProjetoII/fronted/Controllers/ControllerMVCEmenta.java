@@ -1,7 +1,7 @@
 package com.ProjetoII.fronted.Controllers;
 
 import com.ProjetoII.fronted.DataTransferObjects.EmentaDTO;
-import com.ProjetoII.fronted.Proxies.ProxyBackend;
+import com.ProjetoII.fronted.ProxyBackend;
 import lombok.AllArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;

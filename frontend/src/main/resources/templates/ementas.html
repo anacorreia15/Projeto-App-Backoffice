@@ -13,7 +13,7 @@
     <hr id="hr">
     <a class="special" th:href="@{/}" >Geral</a>
     <a class="special" th:href="@{/ementas}">Ementas</a>
-    <a class="special" th:href="@{/graficos}">Estatísticas</a>
+    <a class="special" th:href="@{/estatisticas}">Estatísticas</a>
     <a class="special" th:href="@{/sobre}">Sobre</a>
 </div>
 <div class="container">
@@ -44,7 +44,7 @@
            <!-- Formulário com Bootstrap -->
             <form th:action="@{/ementas/visualizar}" method="get" class="form-inline">
                 <div class="form-group mr-2">
-                    <label for="semana" class="mr-2">Escolha a semana:</label>
+                    <label for="semana" class="mr-2">Selecione a semana:</label>
                     <input type="week" id="semana" name="semana" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Atualizar</button>
@@ -57,7 +57,6 @@
                 <th>Dia</th>
                 <th>Nome da Sopa</th>
                 <th>Volume de Sopa Produzido (litros)</th>
-                <!--<th>Volume de Sopa Produzido</th>-->
             </tr>
             </thead>
             <tbody>

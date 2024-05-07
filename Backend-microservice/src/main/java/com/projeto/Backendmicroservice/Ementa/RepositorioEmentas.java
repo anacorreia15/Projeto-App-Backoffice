@@ -15,4 +15,10 @@ public interface RepositorioEmentas extends JpaRepository<Ementa, Long> {
 
     @Query(value = "SELECT e FROM Ementa e WHERE e.data between :dataInicio AND :dataFim")
     List<Ementa> findEmentasByData(@Param("dataInicio") LocalDate dataInicio, @Param("dataFim") LocalDate dataFim);
+
+    @Query(value = "SELECT SUM(quantidade) as volumeSopaProduzido FROM ementa e WHERE e.data = :data GROUP BY DAY(e.data)", nativeQuery = true)
+    Double findTotalSopaProdByData(@Param("data") LocalDate data);
+
+
 }
+

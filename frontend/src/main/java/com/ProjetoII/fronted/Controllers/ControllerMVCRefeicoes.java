@@ -1,6 +1,6 @@
 package com.ProjetoII.fronted.Controllers;
 
-import com.ProjetoII.fronted.Proxies.ProxyBackend;
+import com.ProjetoII.fronted.ProxyBackend;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
@@ -20,11 +20,6 @@ public class ControllerMVCRefeicoes {
         return "index";
     }
 
-    @GetMapping("/estatisticas")
-    public String getGraficosPage(){
-        return "graficos";
-    }
-
     @GetMapping("/sobre")
     public String getAboutPage(){
         return "sobre";
@@ -34,6 +29,8 @@ public class ControllerMVCRefeicoes {
     public String getData(@RequestParam("mes") int mes,Model model){
         model.addAttribute("dados", proxyBackend.getDadosByMes(mes));
         model.addAttribute("totais", proxyBackend.getTotalLitrosMes(mes));
+        model.addAttribute("totaisRefeicoes", proxyBackend.getTotalMensalRefeicoes(mes));
+        model.addAttribute("totaisRefeicoesSopa", proxyBackend.getTotalMensalRefeicoesComSopa(mes));
         return "index";
     }
 
@@ -46,6 +43,7 @@ public class ControllerMVCRefeicoes {
     @GetMapping("/geral/visualizarData")
     public String getDataByDate(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data, Model model){
         model.addAttribute("dados", proxyBackend.getDadosRefeicaoByDate(data));
+        model.addAttribute("totalSopa", proxyBackend.getTotalSopaProd(data));
         model.addAttribute("totalRefeicoes", proxyBackend.getTotalRefeicoes(data));
         model.addAttribute("totalRefeicoesComSopa", proxyBackend.getTotalRefeicoesComSopa(data));
         model.addAttribute("totalRefeicoesSemSopa", proxyBackend.getTotalRefeicoesSemSopa(data));
