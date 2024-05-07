@@ -92,14 +92,42 @@ public class GestorDadosService {
         return repositorioRefeicoes.countTotalRefeicoesPorSemanaSemTigela(dataInicio, dataFim);
     }
 
-    public Double getTotalSopaDesperdicadaSemana(String semana){
-        LocalDate dataInicio = calcularDatasSemana(semana)[0];
-        LocalDate dataFim = calcularDatasSemana(semana)[1];
-        return repositorioRefeicoes.calculaTotalSopaDesperdicadaPorSemana(dataInicio, dataFim);
+    public static List<LocalDate[]> calcularSemanasDoMes(int mes) {
+        List<LocalDate[]> semanas = new ArrayList<>();
+
+        LocalDate primeiroDiaDoMes = LocalDate.now().withDayOfMonth(1).withMonth(mes);
+        LocalDate ultimoDiaDoMes = primeiroDiaDoMes.withDayOfMonth(primeiroDiaDoMes.lengthOfMonth());
+
+        LocalDate inicioSemana = primeiroDiaDoMes;
+        LocalDate fimSemana = primeiroDiaDoMes.plusDays(6 - primeiroDiaDoMes.getDayOfWeek().getValue());
+
+        while (fimSemana.isBefore(ultimoDiaDoMes) || fimSemana.isEqual(ultimoDiaDoMes)) {
+            semanas.add(new LocalDate[]{inicioSemana, fimSemana});
+
+            inicioSemana = fimSemana.plusDays(1);
+            fimSemana = inicioSemana.plusDays(6);
+        }
+
+        // Se o último dia do mês não cair no último dia de uma semana completa, adicione a semana restante
+        if (inicioSemana.isBefore(ultimoDiaDoMes) || inicioSemana.isEqual(ultimoDiaDoMes)) {
+            semanas.add(new LocalDate[]{inicioSemana, ultimoDiaDoMes});
+        }
+
+        return semanas;
     }
 
-    public Double getTotalSopaDesperdicadaMes(Integer mes){
-        return repositorioRefeicoes.calculaTotalSopaDesperdicadaPorMes(mes);
+    public List<Double> getTotalSopaDesperdicadaSemanas(Integer mes) {
+        List<Double> totaisPorSemana = new ArrayList<>();
+        List<LocalDate[]> semanasDoMes = calcularSemanasDoMes(mes); // Método para calcular as semanas do mês
+
+        for (LocalDate[] semana : semanasDoMes) {
+            LocalDate dataInicio = semana[0];
+            LocalDate dataFim = semana[1];
+            Double totalSemana = repositorioRefeicoes.calculaLitrosDesperdicadosPorSemana(dataInicio, dataFim);
+            totaisPorSemana.add(totalSemana);
+        }
+
+        return totaisPorSemana;
     }
 
     public List<DadosRefeicao> obterTotalSopaSemana(String semana) {
@@ -125,6 +153,39 @@ public class GestorDadosService {
     }
 
 
+    public List<Double> getTotalSopaDesperdicadaMes() {
+        List<Integer> listaMeses = Arrays.asList(1, 2, 3, 4, 5);
+        List<Double> volumeVariosMeses = new ArrayList<>();
+
+        for (Integer mes : listaMeses) {
+            double volumeTotal = repositorioRefeicoes.calculaLitrosDesperdicadosPorMes(mes);
+            volumeVariosMeses.add(volumeTotal);
+        }
+
+        return volumeVariosMeses;
+    }
+
+    public List<Integer> getNrRefeicoesMes(){
+        List<Integer> listaMeses = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> listaNrRefeicoes = new ArrayList<>();
+
+        for (Integer mes : listaMeses) {
+            int n_refeicoes = repositorioRefeicoes.countTotalRefeicoesPorMes(mes);
+            listaNrRefeicoes.add(n_refeicoes);
+        }
+        return listaNrRefeicoes;
+    }
+
+    public List<Integer> getNrRefeicoesMesComTigela(){
+        List<Integer> listaMeses = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> listaNrRefeicoesComTigela = new ArrayList<>();
+
+        for (Integer mes : listaMeses) {
+            int n_refeicoes = repositorioRefeicoes.countTotalRefeicoesPorMesComTigela(mes);
+            listaNrRefeicoesComTigela.add(n_refeicoes);
+        }
+        return listaNrRefeicoesComTigela;
+    }
 
 
 }

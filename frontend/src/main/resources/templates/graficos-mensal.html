@@ -52,12 +52,11 @@
             <a th:href="@{/estatisticas/graficosVariados}" class="btn btn-secondary btn-block">Outras Estatísticas</a>
         </div>
     </div>
-    <span th:if="${comSopa != null and semSopa != null and volumeDespSemanal != null}">
+    <span th:if="${totaisRefeicoesComSopa != null and totaisRefeicoesSemSopa != null}">
         <br><hr><br>
         <div class="row justify-content-center">
-            <h5>Semana: <span th:text="${volumeDespSemanal[0].data}"></span> - <span th:text="${volumeDespSemanal[6].data}"></span></h5>
+            <h5>Mês: <span th:text="${mesSelecionado}"></span></h5>
         </div>
-        <br><br>
         <div class="row">
             <div class="col-md-6">
                 <canvas id="pie-chart" width="400" height="400"></canvas>
@@ -66,9 +65,10 @@
                 <canvas id="bar-chart1" width="400" height="400"></canvas>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="col-md-12">
-                <canvas id="bar-chart2" width="400" height="400"></canvas>
+                <canvas id="line-chart" width="800" height="400"></canvas>
             </div>
         </div>
     </span>
@@ -76,9 +76,9 @@
 <!--Gráficos-->
 <script th:inline="javascript">
     // Dados para o gráfico 1
-    var comSopa =/*[[${comSopa}]]*/ [];
-    var  semSopa =/*[[${semSopa}]]*/ [];
-    var data = /*[[${semSopa}]]*/[];
+    var comSopa =/*[[${totaisRefeicoesComSopa}]]*/ [];
+    var semSopa =/*[[${totaisRefeicoesSemSopa}]]*/ [];
+    //var data = /*[[${semSopa}]]*/[];
 
     console.log([comSopa, semSopa]);
 
@@ -104,26 +104,25 @@
     });
 
     // Dados para o gráfico 2
-    // Inicializa a lista de volumes
-    var volumeDespSemanal = [];
+    var volumesSemanais = /*[[${volumeSopaSemanas}]]*/ [];
 
-    // Adiciona os volumes da lista de objetos do Thymeleaf
-    /*[# th:each="item : ${volumeDespSemanal}"]*/
-    volumeDespSemanal.push(/*[[${item.volumeSopaDesperdicado}]]*/);
-    /*[/]*/
+    // Extrair os volumes semanais para o gráfico
+    var volumes = volumesSemanais;
 
-    var diasSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
-    console.log([volumeDespSemanal]);
+    // Criar rótulos para o eixo x (usando índices)
+    var diasSemana = volumesSemanais.map(function(_, index) {
+        return 'Semana ' + (index + 1);
+    });
 
     // Criar o contexto do gráfico
     var ctx = document.getElementById('bar-chart1').getContext('2d');
     var grafico1 = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: diasSemana, // Usar os nomes dos dias da semana como labels no eixo x
+            labels: diasSemana, // Usar os números das semanas como labels no eixo x
             datasets: [{
-                label: 'Volume de Desperdicio Semanal', // Rótulo para a legenda
-                data: volumeDespSemanal, // Usar os volumes como dados no eixo y
+                label: 'Litros de Desperdício Semanal', // Rótulo para a legenda
+                data: volumes, // Usar os volumes como dados no eixo y
                 backgroundColor: 'rgba(50,205,50)', // Cor para as barras
                 borderWidth: 1 // Largura da borda das barras
             }]
@@ -131,7 +130,7 @@
         options: {
             title: {
                 display: true,
-                text: 'Volume Semanal de Desperdiçado de Sopa' // Título do gráfico
+                text: 'Litros de Sopa Desperdiçado Por Semana' // Título do gráfico
             },
             scales: {
                 yAxes: [{
@@ -143,7 +142,54 @@
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Dia da Semana' // Rótulo do eixo x
+                        labelString: 'Semana' // Rótulo do eixo x
+                    }
+                }]
+            }
+        }
+    });
+    //Dados Gráfico 3
+    var volumesDiarios = /*[[${volumeSopaDiario}]]*/ [];
+
+    // Extrair os volumes diários e os dias do mês para o gráfico
+    var volumes = volumesDiarios.map(function(dia) {
+        return dia.volumeSopaDesperdicado;
+    });
+
+    var diasMes = volumesDiarios.map(function(dia) {
+        return dia.data;
+    });
+    console.log(diasMes,volumes)
+
+    // Criar o contexto do gráfico
+    var ctx = document.getElementById('line-chart').getContext('2d');
+    var grafico = new Chart(ctx, {type: 'line',
+        data: {
+            labels: diasMes, // Usar os dias do mês como labels no eixo x
+            datasets: [{
+                label: 'Volume de Desperdício Diário', // Rótulo para a legenda
+                data: volumes, // Usar os volumes como dados no eixo y
+                fill: false, // Não preencher a área abaixo da linha
+                borderColor: 'rgba(50, 205, 50)', // Cor da linha
+                borderWidth: 2 // Largura da linha
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Volume de Sopa Desperdiçado Por Dia' // Título do gráfico
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Volume' // Rótulo do eixo y
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Dia do Mês' // Rótulo do eixo x
                     }
                 }]
             }
@@ -161,6 +207,7 @@
         // Redireciona para a página desejada passando a data como parâmetro
         window.location.href = '/estatisticas/total-semanal?semana=' + selectedDate;
     });
+
 </script>
 </body>
 </html>

@@ -19,6 +19,8 @@ public interface RepositorioEmentas extends JpaRepository<Ementa, Long> {
     @Query(value = "SELECT SUM(quantidade) as volumeSopaProduzido FROM ementa e WHERE e.data = :data GROUP BY DAY(e.data)", nativeQuery = true)
     Double findTotalSopaProdByData(@Param("data") LocalDate data);
 
+    @Query(value = "SELECT SUM(quantidade) as volumeSopaProduzido FROM ementa e WHERE MONTH(e.data) = :mes", nativeQuery = true)
+    Double findTotalSopaProdByMes(@Param("mes") Integer mes);
 
 }
 

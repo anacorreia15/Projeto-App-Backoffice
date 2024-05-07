@@ -52,5 +52,10 @@ public class EmentaController {
         return gestorDadosService.obterTotalSopaProd(data);
     }
 
+    @GetMapping("/estatisticas/total-sopa-produzuida")
+    public Double getTotalSopaProdMes(@RequestParam("mes") Integer mes){
+        return repositorioEmentas.findTotalSopaProdByMes(mes);
+    }
+
 
 }

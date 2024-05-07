@@ -24,6 +24,9 @@ public interface ProxyBackend {
     @GetMapping("/visualizarMensal/total-com-sopa")
     public Integer getTotalMensalRefeicoesComSopa(@RequestParam("mes") int mes);
 
+    @GetMapping("/visualizarMensal/total-sem-sopa")
+    public Integer getTotalMensalRefeicoesSemSopa(@RequestParam("mes") int mes);
+
     @GetMapping("/visualizar")
     public List<RefeicaoDTO> getAllData();
 
@@ -60,5 +63,24 @@ public interface ProxyBackend {
     public List<DadosRefeicaoDTO> getSopaDesperdicadaPorSemana(@RequestParam("semana") String semana);
 
     @GetMapping("/estatisticas/total-volume-desperdicado-semana")
-    public Double getTotalSopaDesperdicadaPorSemana(@RequestParam("semana") String semana);
+    public List<Double> getTotalSopaDesperdicadaSemanas(@RequestParam("mes") Integer mes);
+
+    @GetMapping("/estatisticas/volume-desperdicado-mes")
+    public List<DadosRefeicaoDTO> getLitrosDesperdicadosPorDia(@RequestParam("mes") Integer mes);
+
+    @GetMapping("/estatisticas/total-volume-desperdicado-mes")
+    public List<Double> getTotalSopaDesperdicada();
+
+    @GetMapping("/estatisticas/total-refeicoes-mes")
+    public List<Integer> getNrRefeicoesMes();
+
+    @GetMapping("/estatisticas/total-refeicoes-mes-tigela")
+    public List<Integer> getNrRefeicoesComTigelaMes();
+
+    @GetMapping("/estatisticas/total-sopa-desperdicada")
+    public Double getTotalSopaDesperdicadaMes(@RequestParam("mes") Integer mes);
+
+    @GetMapping("/estatisticas/total-sopa-produzuida")
+    public Double getTotalSopaProdMes(@RequestParam("mes") Integer mes);
+
 }

@@ -41,6 +41,11 @@ public class RefeicaoController {
         return repositorioRefeicoes.countTotalRefeicoesPorMesComTigela(mes);
     }
 
+    @GetMapping("/visualizarMensal/total-sem-sopa")
+    public Integer getTotalMensalRefeicoesSemSopa(@RequestParam("mes") int mes){
+        return repositorioRefeicoes.countTotalRefeicoesPorMesSemTigela(mes);
+    }
+
     @GetMapping("/visualizar")
     public List<Refeicao> getAllData(){
         return repositorioRefeicoes.findAllRefeicoes();
@@ -81,13 +86,36 @@ public class RefeicaoController {
     }
 
     @GetMapping("/estatisticas/total-volume-desperdicado-semana")
-    public Double getTotalSopaDesperdicadaPorSemana(@RequestParam("semana") String semana){
-        return gestorDadosService.getTotalSopaDesperdicadaSemana(semana);
+    public List<Double> getTotalSopaDesperdicadaSemanas(@RequestParam("mes") Integer mes){
+        return gestorDadosService.getTotalSopaDesperdicadaSemanas(mes);
     }
 
-    @GetMapping("/estatisticas/total-volume-desperdicado-mes")
-    public Double getTotalSopaDesperdicadaPorMes(@RequestParam("mes") Integer mes){
-        return gestorDadosService.getTotalSopaDesperdicadaMes(mes);
+    @GetMapping("/estatisticas/volume-desperdicado-mes")
+    public List<DadosRefeicao> getLitrosDesperdicadosPorDia(@RequestParam("mes") Integer mes){
+        return gestorDadosService.obterTotalSopaMes(mes);
     }
+
+    //volume total de sopa desperdicada dos vários meses
+    @GetMapping("/estatisticas/total-volume-desperdicado-mes")
+    public List<Double> getTotalSopaDesperdicada(){
+        return gestorDadosService.getTotalSopaDesperdicadaMes();
+    }
+
+    @GetMapping("/estatisticas/total-refeicoes-mes")
+    public List<Integer> getNrRefeicoesMes(){
+        return gestorDadosService.getNrRefeicoesMes();
+    }
+
+    @GetMapping("/estatisticas/total-refeicoes-mes-tigela")
+    public List<Integer> getNrRefeicoesComTigelaMes(){
+        return gestorDadosService.getNrRefeicoesMesComTigela();
+    }
+
+    @GetMapping("/estatisticas/total-sopa-desperdicada")
+    public Double getTotalSopaDesperdicadaMes(@RequestParam("mes") Integer mes){
+        return repositorioRefeicoes.calculaLitrosDesperdicadosPorMes(mes);
+    }
+
+
 
 }

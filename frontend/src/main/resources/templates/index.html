@@ -51,13 +51,15 @@
         </div>
     </div>
     <br>
-    <div class="row">
-        <span th:if="${totais != null and totaisRefeicoes != null and totaisRefeicoesSopa != null}">
-            <p class="col-md-4" style="display: inline-block;">Total de litros desperdiçados: <span th:text="${totais}"></span> L</p>
+    <span th:if="${totais != null and totaisRefeicoes != null and totaisRefeicoesSopa != null}">
+        <div class="row">
+            <p class="col">Total de litros desperdiçados: <span th:text="${totais}"></span> L</p>
+        </div>
+        <div class="row">
             <p class="col-md-4" style="display: inline-block;">Total de Refeições Servidas: <span th:text="${totaisRefeicoes}"></span></p>
-            <p class="col-md-4" style="display: inline-block;">Total de Refeições Servidas: <span th:text="${totaisRefeicoesSopa}"></span></p>
-        </span>
-    </div>
+            <p class="col-md-4" style="display: inline-block;">Total de Refeições Servidas com Sopa: <span th:text="${totaisRefeicoesSopa}"></span></p>
+        </div>
+    </span>
     <span th:if="${dados != null}">
     <!-- Tabela para exibir os dados -->
         <table class="table">

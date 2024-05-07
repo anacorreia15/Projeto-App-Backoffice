@@ -49,7 +49,4 @@ public class ControllerMVCRefeicoes {
         model.addAttribute("totalRefeicoesSemSopa", proxyBackend.getTotalRefeicoesSemSopa(data));
         return "index";
     }
-
-
-
 }

@@ -52,87 +52,51 @@
             <a th:href="@{/estatisticas/graficosVariados}" class="btn btn-secondary btn-block">Outras Estatísticas</a>
         </div>
     </div>
-    <span th:if="${comSopa != null and semSopa != null and volumeDespSemanal != null}">
-        <br><hr><br>
-        <div class="row justify-content-center">
-            <h5>Semana: <span th:text="${volumeDespSemanal[0].data}"></span> - <span th:text="${volumeDespSemanal[6].data}"></span></h5>
+    <br><hr><br>
+    <div class="row justify-content-center">
+        <h5>Ano: 2024</h5>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="bar-chart" width="800" height="400"></canvas>
         </div>
-        <br><br>
-        <div class="row">
-            <div class="col-md-6">
-                <canvas id="pie-chart" width="400" height="400"></canvas>
-            </div>
-            <div class="col-md-6">
-                <canvas id="bar-chart1" width="400" height="400"></canvas>
-            </div>
+    </div>
+    <br><hr><br>
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="bar-chart2" width="800" height="400"></canvas>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <canvas id="bar-chart2" width="400" height="400"></canvas>
-            </div>
+    </div>
+    <br><hr><br>
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="pie-chart" width="800" height="400"></canvas>
         </div>
-    </span>
+    </div>
 </div>
 <!--Gráficos-->
 <script th:inline="javascript">
-    // Dados para o gráfico 1
-    var comSopa =/*[[${comSopa}]]*/ [];
-    var  semSopa =/*[[${semSopa}]]*/ [];
-    var data = /*[[${semSopa}]]*/[];
-
-    console.log([comSopa, semSopa]);
-
-    var ctx = document.getElementById('pie-chart').getContext('2d');
-    var grafico = new Chart (ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Tabuleiros Sem Sopa','Tabuleiros Com Sopa'],
-            datasets: [{
-                data: [semSopa, comSopa],
-                backgroundColor: [
-                    'rgba(144,238,144)',  // Cor para "Sem Sopa"
-                    'rgba(50,205,50)' // Cor para "Com Sopa"
-                ]
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Título do Gráfico...'
-            }
-        }
-    });
-
-    // Dados para o gráfico 2
-    // Inicializa a lista de volumes
-    var volumeDespSemanal = [];
-
-    // Adiciona os volumes da lista de objetos do Thymeleaf
-    /*[# th:each="item : ${volumeDespSemanal}"]*/
-    volumeDespSemanal.push(/*[[${item.volumeSopaDesperdicado}]]*/);
-    /*[/]*/
-
-    var diasSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
-    console.log([volumeDespSemanal]);
+    // Receber as listas de Thymeleaf
+    var meses = /*[[${listaMeses}]]*/ [];
+    var volumes = /*[[${dadosVariosMeses}]]*/ [];
 
     // Criar o contexto do gráfico
-    var ctx = document.getElementById('bar-chart1').getContext('2d');
-    var grafico1 = new Chart(ctx, {
+    var ctx = document.getElementById('bar-chart').getContext('2d');
+
+    // Criar o gráfico de barras
+    var grafico = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: diasSemana, // Usar os nomes dos dias da semana como labels no eixo x
+            labels: meses, // Nomes dos meses no eixo x
             datasets: [{
-                label: 'Volume de Desperdicio Semanal', // Rótulo para a legenda
-                data: volumeDespSemanal, // Usar os volumes como dados no eixo y
-                backgroundColor: 'rgba(50,205,50)', // Cor para as barras
+                label: 'Volume Mensal', // Rótulo para a legenda
+                data: volumes, // Valores de volume no eixo y
+                backgroundColor: 'rgba(144,238,144)', // Cor das barras
+                borderColor: 'rgba(50, 168, 82, 1)', // Cor da borda das barras
                 borderWidth: 1 // Largura da borda das barras
             }]
         },
         options: {
-            title: {
-                display: true,
-                text: 'Volume Semanal de Desperdiçado de Sopa' // Título do gráfico
-            },
             scales: {
                 yAxes: [{
                     scaleLabel: {
@@ -143,12 +107,59 @@
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Dia da Semana' // Rótulo do eixo x
+                        labelString: 'Mês' // Rótulo do eixo x
                     }
                 }]
             }
         }
     });
+
+    //gráfico 2
+    var nr_refeicoes = /*[[${nrRefeicoes}]]*/ [];
+    var nr_refeicoes_tigela = /*[[${nrRefeicoesTigela}]]*/ [];
+
+    // Criar o contexto do gráfico
+    var ctx = document.getElementById('bar-chart2').getContext('2d');
+
+    // Criar o gráfico de barras empilhadas
+    var grafico = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: meses, // Nomes dos meses no eixo x
+            datasets: [{
+                label: 'Nr de Refeições Com Tigela', // Rótulo para a primeira série de dados
+                data: nr_refeicoes_tigela, // Valores da primeira série de dados
+                backgroundColor: 'rgba(144, 238, 144)', // Cor das barras
+                borderColor: 'rgba(50, 168, 82, 1)', // Cor da borda das barras
+                borderWidth: 1 // Largura da borda das barras
+            }, {
+                label: 'Nr de Refeições Servidas', // Rótulo para a segunda série de dados
+                data: nr_refeicoes, // Valores da segunda série de dados
+                backgroundColor: 'rgba(255, 99, 132)', // Cor das barras
+                borderColor: 'rgba(255, 99, 132, 1)', // Cor da borda das barras
+                borderWidth: 1 // Largura da borda das barras
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    stacked: true, // Barras empilhadas no eixo y
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Nr de Refeições' // Rótulo do eixo y
+                    }
+                }],
+                xAxes: [{
+                    stacked: true, // Barras empilhadas no eixo x
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Mês' // Rótulo do eixo x
+                    }
+                }]
+            }
+        }
+    });
+
 </script>
 <!-- Inclua o jQuery antes do Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -161,6 +172,7 @@
         // Redireciona para a página desejada passando a data como parâmetro
         window.location.href = '/estatisticas/total-semanal?semana=' + selectedDate;
     });
+
 </script>
 </body>
 </html>
