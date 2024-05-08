@@ -5,10 +5,12 @@ import com.ProjetoII.fronted.DataTransferObjects.EmentaDTO;
 import com.ProjetoII.fronted.DataTransferObjects.RefeicaoDTO;
 import feign.Param;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @FeignClient(name="Backend-microservice")
 public interface ProxyBackend {
@@ -31,19 +33,19 @@ public interface ProxyBackend {
     public List<RefeicaoDTO> getAllData();
 
     @GetMapping("/visualizarData")
-    public List<DadosRefeicaoDTO> getDadosRefeicaoByDate(@RequestParam("data") LocalDate data);
+    public List<DadosRefeicaoDTO> getDadosRefeicaoByDate(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data);
 
     @GetMapping("/visualizarData/total")
-    public Integer getTotalRefeicoes(@RequestParam("data") LocalDate data);
+    public Integer getTotalRefeicoes(@RequestParam("data") @DateTimeFormat (pattern = "yyyy-MM-dd") LocalDate data);
 
     @GetMapping("/visualizarData/total-com-sopa")
-    public Integer getTotalRefeicoesComSopa(@RequestParam("data") LocalDate data);
+    public Integer getTotalRefeicoesComSopa(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data);
 
     @GetMapping("/visualizarData/total-sem-sopa")
-    public Integer getTotalRefeicoesSemSopa(@RequestParam("data") LocalDate data);
+    public Integer getTotalRefeicoesSemSopa(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data);
 
     @GetMapping("/visualizarData/sopaProd")
-    public DadosRefeicaoDTO getTotalSopaProd(@RequestParam("data") LocalDate data);
+    public DadosRefeicaoDTO getTotalSopaProd(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data);
 
     /*Ementa*/
     @PostMapping("/ementas/inserir")

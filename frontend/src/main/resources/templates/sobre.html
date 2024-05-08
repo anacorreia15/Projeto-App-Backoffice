@@ -1,23 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Backoffice</title>
     <!-- Incluindo Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/style.css" rel="stylesheet">
+    <style>
+        p, h4 {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            text-align: justify;
+        }
+    </style>
 </head>
 <body>
 <div class="sidebar">
     <h3><a th:href="@{/}">Backoffice</a></h3>
     <hr id="hr">
-    <a class="special" th:href="@{/}" >Geral</a>
-    <a class="special" th:href="@{/ementas}">Ementas</a>
-    <a class="special" th:href="@{/estatisticas}">Estatísticas</a>
-    <a class="special" th:href="@{/sobre}">Sobre</a>
+    <a class="special" th:href="@{/}">General</a>
+    <a class="special" th:href="@{/ementas}">Menus</a>
+    <a class="special" th:href="@{/estatisticas}">Statistics</a>
+    <a class="special" th:href="@{/sobre}">About</a>
 </div>
 <div class="container">
-   <p>Aqui vai ter um texto muito bonito sobre o nosso projeto :)</p>
+    <h1 class="mb-4"><a th:href="@{/}" style="color: inherit; text-decoration: none;">Backoffice - Waste Control</a></h1>
+    <hr><br>
+    <h4>About Us</h4>
+    <p>Our backoffice platform is the central hub for tracking and analyzing data from our innovative prototype designed
+        to combat food waste in institutional canteens. Our mission is to leverage cutting-edge technology, including
+        computer vision and low-cost IoT components, to reduce food waste and promote sustainable practices.
+    </p>
+    <p>Food waste is a significant global issue with economic, environmental, social, and nutritional repercussions.
+        It affects every stage of the food supply chain, but the problem is particularly acute at the retail and final
+        consumption stages, where a substantial amount of food is discarded.
+    </p>
+    <p>Our project aims to address this issue by focusing on institutional canteens, where food waste arises from unsold
+        prepared meals (leftovers) and food left on plates after consumption (scraps). We've centered our research on
+        measuring the food waste in the tray with soup by calculating the amount of soup in liters wasted.
+    </p>
+    <p>Through this backoffice, you can in “General”, access tables of daily and monthly waste data. In the "Menus"
+        section, you can add the soup of the day and the amount produced, while in the "Statistics" section, you can
+        check graphics to help analyze the waste.
+    </p>
+    <p>This data-driven approach will not only assist in the decision-making process for canteen management but also
+        contribute to broader efforts to reduce food waste in alignment with Sustainable Development Goals (SDG) target
+        12.3, which seeks to halve global food waste by 2030.
+    </p>
 </div>
 <!-- Inclua o jQuery antes do Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

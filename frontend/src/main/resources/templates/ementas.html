@@ -11,52 +11,52 @@
 <div class="sidebar">
     <h3><a th:href="@{/}">Backoffice</a></h3>
     <hr id="hr">
-    <a class="special" th:href="@{/}" >Geral</a>
-    <a class="special" th:href="@{/ementas}">Ementas</a>
-    <a class="special" th:href="@{/estatisticas}">Estatísticas</a>
-    <a class="special" th:href="@{/sobre}">Sobre</a>
+    <a class="special" th:href="@{/}">General</a>
+    <a class="special" th:href="@{/ementas}">Menus</a>
+    <a class="special" th:href="@{/estatisticas}">Statistics</a>
+    <a class="special" th:href="@{/sobre}">About</a>
 </div>
 <div class="container">
-    <h1 class="mb-4"><a th:href="@{/}" style="color: inherit; text-decoration: none;">Backoffice - Controlo de Desperdício</a></h1>
+    <h1 class="mb-4"><a th:href="@{/}" style="color: inherit; text-decoration: none;">Backoffice - Waste Control</a></h1>
     <div>
-        <br><br>
-        <h4>Inserir ementas</h4>
+        <hr><br>
+        <h4>Insert Menus</h4>
         <form th:action="@{/ementas/inserir}" method="post" >
             <div class="form-group">
-                <label for="data">Data:</label>
+                <label for="data">Date:</label>
                 <input type="date" id="data" name="data" class="form-control" required/>
             </div>
             <div class="form-group">
-                <label for="nomeSopa">Nome da sopa:</label>
+                <label for="nomeSopa">Soup Name:</label>
                 <input type="text" id="nomeSopa" name="nomeSopa" class="form-control" required/>
             </div>
             <div class="form-group">
-                <label for="quantidade">Volume (litros) Produzido:</label>
+                <label for="quantidade">Volume (liters) Produced:</label>
                 <input type="text" id="quantidade" name="quantidade" class="form-control" required/>
             </div>
-            <button type="submit" class="btn btn-primary">Inserir</button>
+            <button type="submit" class="btn btn-primary">Insert</button>
         </form>
     </div>
     <br><hr><br>
     <div>
-        <h4>Visualizar ementas Semanais</h4>
+        <h4>View Weekly Menus</h4>
         <div class="container">
            <!-- Formulário com Bootstrap -->
             <form th:action="@{/ementas/visualizar}" method="get" class="form-inline">
                 <div class="form-group mr-2">
-                    <label for="semana" class="mr-2">Selecione a semana:</label>
+                    <label for="semana" class="mr-2">Select week:</label>
                     <input type="week" id="semana" name="semana" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Atualizar</button>
+                <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>
         <br>
         <table class="table">
             <thead>
             <tr>
-                <th>Dia</th>
-                <th>Nome da Sopa</th>
-                <th>Volume de Sopa Produzido (litros)</th>
+                <th>Date</th>
+                <th>Soup Name</th>
+                <th>Volume of Soup Produced (liters) </th>
             </tr>
             </thead>
             <tbody>

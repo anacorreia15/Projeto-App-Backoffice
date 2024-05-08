@@ -34,11 +34,11 @@ public class ControllerMVCEstatisticas {
 
         String mesSelecionado = "";
         switch (mes) {
-            case 1: mesSelecionado = "Janeiro"; break;
-            case 2: mesSelecionado = "Fevereiro"; break;
-            case 3: mesSelecionado = "Março"; break;
-            case 4: mesSelecionado = "Abril"; break;
-            case 5: mesSelecionado = "Maio"; break;
+            case 1: mesSelecionado = "January"; break;
+            case 2: mesSelecionado = "February"; break;
+            case 3: mesSelecionado = "March"; break;
+            case 4: mesSelecionado = "April"; break;
+            case 5: mesSelecionado = "May"; break;
             // Adicione os outros meses conforme necessário
         }
 

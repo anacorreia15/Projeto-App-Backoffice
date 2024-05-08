@@ -3,6 +3,7 @@ package com.projeto.Backendmicroservice.Ementa;
 import com.projeto.Backendmicroservice.Refeicao.DadosRefeicao;
 import com.projeto.Backendmicroservice.Refeicao.GestorDadosService;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
@@ -48,7 +49,7 @@ public class EmentaController {
     }
 
     @GetMapping("/visualizarData/sopaProd")
-    public DadosRefeicao getTotalSopaProd(@RequestParam("data") LocalDate data) {
+    public DadosRefeicao getTotalSopaProd(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data) {
         return gestorDadosService.obterTotalSopaProd(data);
     }
 

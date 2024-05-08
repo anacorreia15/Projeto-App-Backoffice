@@ -1,18 +1,11 @@
 package com.projeto.Backendmicroservice.Refeicao;
 
-import com.projeto.Backendmicroservice.Ementa.Ementa;
-import com.projeto.Backendmicroservice.Ementa.RepositorioEmentas;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
-@SuppressWarnings("LanguageDetectionInspection")
 @RestController
 @AllArgsConstructor
 public class RefeicaoController {
@@ -52,21 +45,21 @@ public class RefeicaoController {
     }
 
     @GetMapping("/visualizarData")
-    public List<DadosRefeicao> getDadosRefeicaoByDate(@RequestParam("data") LocalDate data){
+    public List<DadosRefeicao> getDadosRefeicaoByDate(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data){
         return gestorDadosService.obterTotalSopa(data);
     }
 
     @GetMapping("/visualizarData/total")
-    public Integer getTotalRefeicoes(@RequestParam("data") LocalDate data){
+    public Integer getTotalRefeicoes(@RequestParam("data")@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data){
         return repositorioRefeicoes.countTotalRefeicoesPorDia(data);
     }
 
     @GetMapping("/visualizarData/total-com-sopa")
-    public Integer getTotalRefeicoesComSopa(@RequestParam("data") LocalDate data){
+    public Integer getTotalRefeicoesComSopa(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data){
         return repositorioRefeicoes.countTotalRefeicoesPorDiaComTigela(data);
     }
     @GetMapping("/visualizarData/total-sem-sopa")
-    public Integer getTotalRefeicoesSemSopa(@RequestParam("data") LocalDate data){
+    public Integer getTotalRefeicoesSemSopa(@RequestParam("data") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate data){
         return repositorioRefeicoes.countTotalRefeicoesPorDiaSemTigela(data);
     }
 
