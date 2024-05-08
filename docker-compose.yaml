@@ -1,0 +1,63 @@
+version: '3.3'
+services:
+  server_db:
+    image: mysql:8.0
+    container_name: mysqldb
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'test'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'senha'
+      MYSQL_ROOT_PASSWORD: 'server123'
+    ports:
+      - '3306:3306'
+    expose :
+      - 3306
+    networks:
+      -  web-network
+    volumes:
+      - ./testDB.sql:/docker-entrypoint-initdb.d/testDB.sql
+
+  server-eureka:
+    image: anacorreia15/eureka-server
+    container_name: eureka-server
+    restart: always
+    ports:
+      - '8761:8761'
+    networks:
+      web-network:
+        ipv4_address: 10.5.0.5
+
+  server-frontend:
+    image: anacorreia15/frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - '8030:8030'
+    networks:
+      - web-network
+    environment:
+      - JAVA_OPTS=-Dporta=8030
+    depends_on:
+      - server-eureka
+      - server-backend
+
+  server-backend:
+    image: anacorreia15/backend
+    container_name: backend
+    restart: always
+    ports:
+      - '8060:8060'
+    environment:
+      - JAVA_OPTS=-Dporta=8060
+    networks:
+      - web-network
+    depends_on:
+      - server-eureka
+
+networks:
+  web-network:
+    driver: bridge #host (possivel solucao para lb)
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
